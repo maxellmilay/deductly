@@ -1,53 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import { usePathname } from 'expo-router';
 
 const Header = () => {
+    const pathname = usePathname();
+    const [isHome, setIsHome] = useState(true);
+    useEffect(() => {
+        const isHome =
+            pathname === '/home' || pathname === '/(protected)/(tabs)/home';
+        setIsHome(isHome);
+    }, [pathname]);
+
     return (
-        <SafeAreaView edges={['top']}>
-            <View style={styles.container}>
+        <View
+            className={`flex-row py-4 px-2 items-center ${
+                isHome ? 'justify-end' : 'justify-between'
+            } relative`}
+        >
+            {!isHome && (
                 <Link href="/(protected)/(tabs)/home" asChild>
-                    <TouchableOpacity style={styles.buttonContainer}>
-                        <Text style={styles.text}>Home</Text>
+                    <TouchableOpacity>
+                        <View className="flex-row items-center">
+                            <FontAwesome6
+                                name="chevron-left"
+                                size={16}
+                                color="#1fddee"
+                                className="mr-2"
+                                solid
+                            />
+                            <View>
+                                <Text className="text-primary font-semibold text-base">
+                                    Home
+                                </Text>
+                            </View>
+                        </View>
                     </TouchableOpacity>
                 </Link>
-                <Link href="/(protected)/profile" asChild>
-                    <FontAwesome6
-                        name="circle-user"
-                        size={32}
-                        color="#1fddee"
-                        solid
-                    />
-                </Link>
-            </View>
-        </SafeAreaView>
+            )}
+            <Link href="/(protected)/profile" asChild>
+                <FontAwesome6
+                    name="circle-user"
+                    size={32}
+                    color="#1fddee"
+                    solid
+                />
+            </Link>
+        </View>
     );
 };
 
 export default Header;
-
-const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 24,
-        paddingTop: 16, // Add space only at the top
-        paddingBottom: 16, // Minimal bottom padding
-    },
-    buttonContainer: {
-        alignSelf: 'flex-start',
-        backgroundColor: '#1fddee',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 20,
-    },
-    text: {
-        color: 'white',
-        fontWeight: '600',
-        fontSize: 15,
-    },
-});

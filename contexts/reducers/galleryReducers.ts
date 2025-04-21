@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { imagesApi } from '@/services/api/gallery';
+import { imagesApi } from '@/services/api/camera';
 import type { Image } from '@/interfaces';
 import type { ImageUploadOptions, ImageOptimizeOptions } from '@/interfaces';
 

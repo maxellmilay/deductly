@@ -1,10 +1,35 @@
 import { createApiService, api } from '@/services/api/baseApi';
 import type { Receipt, ReceiptItem } from '@/interfaces';
 
-const endpoint = '/receipts';
+const endpoint = '/receipt';
 
 export const receiptsApi = {
     ...createApiService<Receipt>(endpoint),
+
+    // Base API methods
+    getAll: async () => {
+        const response = await api.get<Receipt[]>(`${endpoint}/`);
+        return response.data;
+    },
+    getById: async (id: string) => {
+        const response = await api.get<Receipt>(`${endpoint}/${id}`);
+        return response.data;
+    },
+    post: async (receipt: Receipt) => {
+        const response = await api.post<Receipt>(`${endpoint}/`, receipt);
+        return response.data;
+    },
+    put: async (id: string, receipt: Receipt) => {
+        const response = await api.put<Receipt>(`${endpoint}/${id}/`, receipt);
+        return response.data;
+    },
+    delete: async (id: string) => {
+        const response = await api.delete(`${endpoint}/${id}/`);
+        if (response.status === 204) {
+            // Optionally handle successful deletion (e.g., update state)
+        }
+        return response.data;
+    },
 
     // Receipt-specific methods
     scan: async (

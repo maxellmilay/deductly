@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { ScrollableLayout } from '@/components/ScrollableLayout';
 import Header from '@/components/Header';
@@ -58,6 +58,8 @@ const document = [
 ];
 
 const HomeScreen = () => {
+    const router = useRouter();
+
     const renderHeader = () => (
         <>
             <Header />
@@ -127,7 +129,7 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id.toString()}
-                horizontal={true}
+                horizontal
                 showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={() => <View className="w-2" />}
                 contentContainerStyle={{ gap: 8 }}
@@ -137,11 +139,22 @@ const HomeScreen = () => {
     );
 
     const renderReceiptItem = ({ item }: { item: any }) => (
-        <TouchableOpacity className="flex-row  h-24 items-center bg-gray-50 rounded-xl mb-4">
+        <TouchableOpacity
+            className="flex-row h-24 items-center bg-gray-50 rounded-xl mb-4"
+            onPress={() => {
+                // If the item is Alicia Keys, navigate to indivAnalytics
+                if (item.name === 'Alicia Keys') {
+                    router.push(`/(protected)/indivAnalytics?id=${item.id}`);
+                } else {
+                    // For other items, keep the existing behavior or modify as needed
+                    router.push(`/protected/(tabs)/receipts/${item.id}`);
+                }
+            }}
+        >
             <View className="w-24 h-full bg-gray-200 rounded-lg items-center justify-center">
                 <FontAwesome6 name="image" size={24} color="#A0A0A0" />
             </View>
-            <View className="ml-4 p-4  flex-1">
+            <View className="ml-4 p-4 flex-1">
                 <Text className="font-semibold text-lg">{item.name}</Text>
                 <Text className="text-gray-500">{item.location}</Text>
             </View>
